@@ -1,0 +1,71 @@
+<<<<<<< HEAD
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Data and model files
+*.pickle
+*.pkl
+*.h5
+*.hdf5
+*.csv
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.venv
+venv/
+ENV/
+env/
+
+# VSCode settings
+.vscode/
+
+# Ignore logs
+*.log
+
+# Ignore test outputs
+*.out
+*.tmp
+=======
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Data and model files
+*.pickle
+*.pkl
+*.h5
+*.hdf5
+*.csv
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.venv
+venv/
+ENV/
+env/
+
+# VSCode settings
+.vscode/
+
+# Ignore logs
+*.log
+
+# Ignore test outputs
+*.out
+*.tmp
+>>>>>>> 68eb9992057b40e8debd77e326987164800dd24e

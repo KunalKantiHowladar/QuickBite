@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+<style>
+    .auth-container {
+        max-width: 450px;
+        margin: 60px auto;
+        padding: 30px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .auth-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .auth-header h2 {
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 10px;
+    }
+    
+    .auth-header p {
+        color: #777;
+        font-size: 1rem;
+    }
+    
+    .auth-form .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .auth-form label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #555;
+    }
+    
+    .auth-form input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+        box-sizing: border-box;
+    }
+    
+    .auth-form input:focus {
+        border-color: #FF6B35;
+        outline: none;
+    }
+    
+    .auth-form .submit-btn {
+        width: 100%;
+        background-color: #FF6B35;
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        box-sizing: border-box;
+    }
+    
+    .auth-form .submit-btn:hover {
+        background-color: #e55a2a;
+    }
+    
+    .auth-footer {
+        text-align: center;
+        margin-top: 25px;
+        color: #777;
+    }
+    
+    .auth-footer a {
+        color: #FF6B35;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .auth-footer a:hover {
+        text-decoration: underline;
+    }
+    
+    .input-error {
+        border-color: #ff3b30 !important;
+    }
+    
+    .error-message {
+        color: #ff3b30;
+        font-size: 0.85rem;
+        margin-top: 5px;
+        display: none;
+    }
+
+    .alert {
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .alert-error {
+        background-color: #ffebee;
+        color: #ff3b30;
+        border: 1px solid #ffcdd2;
+    }
+
+    .alert-success {
+        background-color: #e8f5e9;
+        color: #4caf50;
+        border: 1px solid #c8e6c9;
+    }
+
+    .alert-info {
+        background-color: #e3f2fd;
+        color: #2196f3;
+        border: 1px solid #bbdefb;
+    }
+    
+    /* Password field with toggle button styles */
+    .password-field {
+        position: relative;
+    }
+    
+    .password-toggle {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #777;
+        font-size: 1.2rem;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .password-toggle:hover {
+        color: #FF6B35;
+    }
+    
+    .eye-icon {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-header">
+        <h2>Welcome Back!</h2>
+        <p>Sign in to access your recipes and preferences</p>
+    </div>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <form class="auth-form" method="POST" action="{{ url_for('login') }}">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required placeholder="Enter your email">
+            <div class="error-message" id="email-error">Please enter a valid email address</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password</label>
+            <div class="password-field">
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+                <button type="button" class="password-toggle" id="password-toggle">
+                    <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="error-message" id="password-error">Password must be at least 6 characters</div>
+        </div>
+        
+        <button type="submit" class="submit-btn">Login</button>
+    </form>
+    
+    <div class="auth-footer">
+        <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign Up</a></p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const form = document.querySelector('.auth-form');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const passwordToggle = document.getElementById('password-toggle');
+    
+    const emailError = document.getElementById('email-error');
+    const passwordError = document.getElementById('password-error');
+    
+    // Password visibility toggle
+    passwordToggle.addEventListener('click', function() {
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            this.innerHTML = `
+                <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 13c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm6-9H6c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM6 6h12v14H6V6z"/>
+                </svg>
+            `;
+        } else {
+            passwordInput.type = 'password';
+            this.innerHTML = `
+                <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                </svg>
+            `;
+        }
+    });
+    
+    // Email validation
+    function validateEmail(email) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email.toLowerCase());
+    }
+    
+    // Password validation
+    function validatePassword(password) {
+        return password.length >= 6;
+    }
+    
+    emailInput.addEventListener('blur', function() {
+        if (!validateEmail(this.value) && this.value.trim() !== '') {
+            this.classList.add('input-error');
+            emailError.style.display = 'block';
+        } else {
+            this.classList.remove('input-error');
+            emailError.style.display = 'none';
+        }
+    });
+    
+    passwordInput.addEventListener('blur', function() {
+        if (!validatePassword(this.value) && this.value.trim() !== '') {
+            this.classList.add('input-error');
+            passwordError.style.display = 'block';
+        } else {
+            this.classList.remove('input-error');
+            passwordError.style.display = 'none';
+        }
+    });
+    
+    form.addEventListener('submit', function(event) {
+        let isValid = true;
+        
+        // Email validation
+        if (!validateEmail(emailInput.value)) {
+            emailInput.classList.add('input-error');
+            emailError.style.display = 'block';
+            isValid = false;
+        }
+        
+        // Password validation
+        if (!validatePassword(passwordInput.value)) {
+            passwordInput.classList.add('input-error');
+            passwordError.style.display = 'block';
+            isValid = false;
+        }
+        
+        if (!isValid) {
+            event.preventDefault();
+        }
+    });
+</script>
+{% endblock %} 

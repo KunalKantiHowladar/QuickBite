@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+<style>
+    .recipes-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+    
+    .recipes-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .recipes-header h1 {
+        font-size: 2.5rem;
+        color: #333;
+        margin-bottom: 10px;
+    }
+    
+    .recipes-header p {
+        color: #777;
+        font-size: 1.1rem;
+    }
+    
+    .recipes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+    }
+    
+    .recipe-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+    
+    .recipe-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .recipe-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+    
+    .recipe-content {
+        padding: 20px;
+    }
+    
+    .recipe-title {
+        font-size: 1.3rem;
+        color: #333;
+        margin-bottom: 10px;
+    }
+    
+    .recipe-meta {
+        display: flex;
+        justify-content: space-between;
+        color: #777;
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+    }
+    
+    .recipe-description {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 15px;
+        line-height: 1.5;
+    }
+    
+    .recipe-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .recipe-rating {
+        color: #FF6B35;
+        font-weight: 600;
+    }
+    
+    .recipe-button {
+        background-color: #FF6B35;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    .recipe-button:hover {
+        background-color: #e55a2a;
+    }
+    
+    .search-bar {
+        max-width: 600px;
+        margin: 0 auto 40px;
+    }
+    
+    .search-input {
+        width: 100%;
+        padding: 12px 20px;
+        border: 2px solid #ddd;
+        border-radius: 30px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+    }
+    
+    .search-input:focus {
+        border-color: #FF6B35;
+        outline: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="recipes-container">
+    <div class="recipes-header">
+        <h1>Discover Recipes</h1>
+        <p>Find your next favorite dish</p>
+    </div>
+    
+    <div class="search-bar">
+        <input type="text" class="search-input" placeholder="Search recipes by ingredients, name, or type...">
+    </div>
+    
+    <div class="recipes-grid">
+        {% for recipe_id, recipe in recipes.items() %}
+        <div class="recipe-card">
+            <img src="{{ recipe.image_url or '/static/images/recipe-placeholder.jpg' }}" alt="{{ recipe.name }}" class="recipe-image">
+            <div class="recipe-content">
+                <h3 class="recipe-title">{{ recipe.name }}</h3>
+                <div class="recipe-meta">
+                    <span>{{ recipe.cooking_time }} min</span>
+                    <span class="recipe-rating">★ {{ recipe.rating|default('0.0') }}</span>
+                </div>
+                <p class="recipe-description">{{ recipe.description[:100] }}{% if recipe.description|length > 100 %}...{% endif %}</p>
+                <div class="recipe-actions">
+                    <a href="{{ url_for('recipe_detail', recipe_id=recipe_id) }}" class="recipe-button">View Recipe</a>
+                    <a href="{{ url_for('share_recipe', recipe_id=recipe_id) }}" class="recipe-button">Share</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const searchInput = document.querySelector('.search-input');
+    const recipeCards = document.querySelectorAll('.recipe-card');
+    
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        
+        recipeCards.forEach(card => {
+            const title = card.querySelector('.recipe-title').textContent.toLowerCase();
+            const description = card.querySelector('.recipe-description').textContent.toLowerCase();
+            
+            if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %} 

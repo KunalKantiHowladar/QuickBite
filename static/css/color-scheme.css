@@ -1,0 +1,50 @@
+/**
+ * QuickBite Color Scheme
+ * 
+ * This file documents the standard colors used throughout the QuickBite application.
+ * Refer to this guide when adding new components to maintain consistent styling.
+ */
+
+:root {
+    /* Primary Colors */
+    --primary-color: #FF6B35;       /* Orange - primary brand color */
+    --primary-light: rgba(255, 107, 53, 0.1);
+    --secondary-color: #4A90E2;     /* Blue - secondary accent */
+    
+    /* Background Colors */
+    --background-color: #fffdf9;    /* Light cream - main background */
+    --card-bg-color: #ffffff;       /* White - card backgrounds */
+    
+    /* Text Colors */
+    --text-color: #333333;          /* Dark gray - main text */
+    --text-light: #777777;          /* Medium gray - secondary text */
+    
+    /* Border and Detail Colors */
+    --border-color: #eaeaea;        /* Light gray - borders */
+    
+    /* Status Colors */
+    --success-color: #28a745;       /* Green - success messages */
+    --error-color: #dc3545;         /* Red - error messages */
+    --info-color: #17a2b8;          /* Teal - info messages */
+    
+    /* Effects */
+    --shadow: 0 3px 10px rgba(0, 0, 0, 0.08); /* Standard shadow */
+    --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.05); /* Lighter shadow */
+}
+
+/**
+ * Usage Guide:
+ * 
+ * 1. Import this file into your CSS or reference these variables in your stylesheets
+ * 2. Use the variables consistently throughout components
+ * 3. For text on colored backgrounds, ensure sufficient contrast
+ * 
+ * Examples:
+ * 
+ * - Primary action buttons: background-color: var(--primary-color);
+ * - Card backgrounds: background-color: var(--card-bg-color);
+ * - Main text: color: var(--text-color);
+ * - Secondary text (captions, help text): color: var(--text-light);
+ * - Dividers, subtle borders: border: 1px solid var(--border-color);
+ * - Box shadows: box-shadow: var(--shadow);
+ */ 

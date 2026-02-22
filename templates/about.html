@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+<style>
+    /* About page specific styles */
+    .about-section {
+        padding: 80px 20px;
+        background-color: #fffdf9;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Food doodle decorations */
+    .about-section::before {
+        content: "";
+        position: absolute;
+        top: 70px;
+        left: 50px;
+        width: 70px;
+        height: 70px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FF6B35' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2a9 9 0 0 1 9 9c0 4-7 10-9 12-2-2-9-8-9-12a9 9 0 0 1 9-9zm0 6a3 3 0 1 0 0 6 3 3 0 0 0 0-6z'/%3E%3C/svg%3E");
+        opacity: 0.1;
+        transform: rotate(-15deg);
+    }
+    
+    .about-section::after {
+        content: "";
+        position: absolute;
+        bottom: 100px;
+        right: 70px;
+        width: 80px;
+        height: 80px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234A90E2' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 6v6l4 2'/%3E%3C/svg%3E");
+        opacity: 0.1;
+        transform: rotate(10deg);
+    }
+    
+    .about-content {
+        max-width: 900px;
+        margin: 0 auto;
+        line-height: 1.8;
+        background-color: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        position: relative;
+        z-index: 2;
+        animation: fadeIn 0.8s ease-out;
+    }
+    
+    .about-content::before {
+        content: "";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        width: 30px;
+        height: 30px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FF6B35' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' y1='8' x2='12' y2='12'/%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'/%3E%3C/svg%3E");
+        opacity: 0.3;
+    }
+    
+    .about-content h2 {
+        font-size: 2.5rem;
+        color: #333;
+        margin-bottom: 30px;
+        animation: slideInDown 0.6s ease-out;
+    }
+    
+    .about-content p {
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+        color: #555;
+        animation: fadeIn 1s ease-out;
+    }
+    
+    .about-content h3 {
+        font-size: 1.5rem;
+        color: #FF6B35;
+        margin: 30px 0 20px;
+        animation: fadeIn 1s ease-out;
+        display: inline-block;
+        padding-bottom: 5px;
+        border-bottom: 2px solid rgba(255, 107, 53, 0.3);
+    }
+    
+    .about-feature {
+        display: flex;
+        align-items: flex-start;
+        text-align: left;
+        margin-bottom: 15px;
+        animation: slideInUp 0.6s ease-out;
+        opacity: 0;
+        animation-fill-mode: forwards;
+    }
+    
+    .about-feature:nth-child(1) {
+        animation-delay: 0.2s;
+    }
+    
+    .about-feature:nth-child(2) {
+        animation-delay: 0.4s;
+    }
+    
+    .about-feature:nth-child(3) {
+        animation-delay: 0.6s;
+    }
+    
+    .about-feature i {
+        color: #FF6B35;
+        font-size: 1.3rem;
+        margin-right: 15px;
+        margin-top: 3px;
+        transition: transform 0.3s ease;
+    }
+    
+    .about-feature:hover i {
+        transform: scale(1.2);
+    }
+    
+    .emoji {
+        font-size: 1.2rem;
+        display: inline-block;
+    }
+    
+    .floating {
+        animation: floating 6s ease-in-out infinite;
+    }
+    
+    @keyframes floating {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+    
+    .rotating {
+        display: inline-block;
+        animation: rotating 10s linear infinite;
+    }
+    
+    @keyframes rotating {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    
+    @media (max-width: 768px) {
+        .about-content {
+            padding: 25px;
+        }
+        
+        .about-content h2 {
+            font-size: 2rem;
+        }
+        
+        .about-content p {
+            font-size: 1rem;
+        }
+        
+        .about-section::before,
+        .about-section::after {
+            width: 40px;
+            height: 40px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="about-section">
+    <div class="about-content">
+        <h2>About QuickBite – Your AI-Powered Kitchen Companion <span class="emoji floating">🍽️</span><span class="emoji rotating">🤖</span></h2>
+        <p>Cooking isn't just about following recipes—it's about creativity, convenience, and discovery. That's where QuickBite comes in! <span class="emoji floating">🚀</span></p>
+
+        <p>We're not just another recipe app. QuickBite is your smart, chat-based cooking assistant, designed to turn your ingredients into mouthwatering meals in seconds. Whether you're craving something delicious or just working with what's in your fridge, we've got your back! <span class="emoji floating" style="animation-delay: 1s;">🍳</span><span class="emoji floating" style="animation-delay: 0.5s;">✨</span></p>
+
+        <h3><span class="emoji floating">🔥</span> How QuickBite Works</h3>
+        <div class="about-feature">
+            <i class="fas fa-search"></i>
+            <div>
+                <strong>Smart Recipe Matching</strong> – No more guessing! Just tell us what ingredients you have, and we'll suggest the perfect dish.
+            </div>
+        </div>
+        <div class="about-feature">
+            <i class="fas fa-robot"></i>
+            <div>
+                <strong>AI-Powered Recommendations</strong> – Using advanced Word2Vec & NLP, QuickBite understands ingredients like a pro chef and finds the best match.
+            </div>
+        </div>
+        <h3><span class="emoji floating" style="animation-delay: 0.8s;">💡</span> Why QuickBite?</h3>
+        <div class="about-feature">
+            <i class="fas fa-check"></i>
+            <div>
+                <strong>No More Wasted Food</strong> – Maximize what's in your kitchen and avoid unnecessary grocery trips. <span class="emoji floating" style="animation-delay: 1s;">🛒</span>
+            </div>
+        </div>
+        <div class="about-feature">
+            <i class="fas fa-check"></i>
+            <div>
+                <strong>Instant Cooking Inspiration</strong> – Forget scrolling through endless recipes—get quick, tailored suggestions. <span class="emoji floating" style="animation-delay: 1.2s;">⏳</span>
+            </div>
+        </div>
+        <div class="about-feature">
+            <i class="fas fa-check"></i>
+            <div>
+                <strong>Always Learning</strong> – The more you chat, the better QuickBite understands your preferences. <span class="emoji floating" style="animation-delay: 1.4s;">🧠</span>
+            </div>
+        </div>
+
+        <p>Cooking should be effortless, fun, and exciting! With QuickBite, every meal is a new adventure waiting to happen.</p>
+
+        <p>Say hi, and let's whip up something delicious together! <span class="emoji floating" style="animation-delay: 0.3s;">🍕</span><span class="emoji floating" style="animation-delay: 0.6s;">👨‍🍳</span><span class="emoji floating" style="animation-delay: 0.9s;">👩‍🍳</span></p>
+    </div>
+</section>
+{% endblock %} 

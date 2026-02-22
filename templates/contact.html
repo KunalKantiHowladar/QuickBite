@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<style>
+    .contact-section {
+        padding: 80px 20px;
+        max-width: 800px;
+        margin: 0 auto;
+        min-height: calc(100vh - 200px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+    }
+    
+    /* Doodle decorations */
+    .contact-section::before {
+        content: "";
+        position: absolute;
+        top: 50px;
+        right: -40px;
+        width: 100px;
+        height: 100px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234A90E2' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16 2v6h6'/%3E%3Cpath d='M22 2L12 12'/%3E%3Cpath d='M8 16H2v6'/%3E%3Cpath d='M2 22l10-10'/%3E%3C/svg%3E");
+        opacity: 0.1;
+        transform: rotate(10deg);
+        pointer-events: none;
+        z-index: -1;
+    }
+    
+    .contact-section::after {
+        content: "";
+        position: absolute;
+        bottom: 50px;
+        left: -30px;
+        width: 70px;
+        height: 70px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FF6B35' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/%3E%3Cpolyline points='9 22 9 12 15 12 15 22'/%3E%3C/svg%3E");
+        opacity: 0.1;
+        transform: rotate(-5deg);
+        pointer-events: none;
+        z-index: -1;
+    }
+    
+    .contact-section h1 {
+        color: #FF6B35;
+        margin-bottom: 30px;
+        text-align: center;
+        font-size: 2.5rem;
+        animation: fadeIn 0.8s ease-out;
+    }
+    
+    .contact-content {
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        padding: 40px;
+        animation: slideInUp 0.8s ease-out;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .contact-content::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(to right, #FF6B35, #4A90E2);
+    }
+    
+    .contact-info {
+        margin-bottom: 30px;
+        position: relative;
+    }
+    
+    .contact-info > p:first-child {
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+        animation: fadeIn 1s ease-out;
+    }
+    
+    .contact-info > p:last-child {
+        font-size: 1.1rem;
+        margin-top: 25px;
+        animation: fadeIn 1s ease-out;
+        padding: 15px;
+        background-color: rgba(255, 107, 53, 0.05);
+        border-radius: 8px;
+    }
+    
+    .contact-item {
+        margin-bottom: 25px;
+        padding-left: 15px;
+        border-left: 3px solid #FF6B35;
+        animation: slideInRight 0.6s ease-out;
+        animation-fill-mode: both;
+        opacity: 0;
+    }
+    
+    .contact-item:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    
+    .contact-item:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+    
+    .contact-item:nth-child(4) {
+        animation-delay: 0.6s;
+    }
+    
+    @keyframes slideInRight {
+        from {
+            transform: translateX(-20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    .contact-item h3 {
+        font-size: 1.3rem;
+        color: #333;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .contact-item h3 i, .contact-item h3 span {
+        margin-right: 10px;
+        color: #FF6B35;
+        font-size: 1.4rem;
+    }
+    
+    .contact-item p {
+        margin: 5px 0;
+        line-height: 1.6;
+        font-size: 1.05rem;
+    }
+    
+    .contact-item a {
+        color: #4A90E2;
+        text-decoration: none;
+        font-weight: 500;
+        position: relative;
+        transition: all 0.3s ease;
+        padding-bottom: 2px;
+    }
+    
+    .contact-item a::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: #4A90E2;
+        transition: width 0.3s ease;
+    }
+    
+    .contact-item a:hover {
+        color: #3a7bc8;
+    }
+    
+    .contact-item a:hover::after {
+        width: 100%;
+    }
+    
+    .emoji-float {
+        display: inline-block;
+        animation: floating 6s ease-in-out infinite;
+    }
+    
+    @keyframes floating {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+    
+    .sparkle {
+        display: inline-block;
+        animation: sparkle 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes sparkle {
+        0% { opacity: 0.5; transform: scale(0.8); }
+        50% { opacity: 1; transform: scale(1.1); }
+        100% { opacity: 0.5; transform: scale(0.8); }
+    }
+    
+    @media (max-width: 768px) {
+        .contact-section {
+            padding: 60px 15px;
+        }
+        
+        .contact-content {
+            padding: 25px;
+        }
+        
+        .contact-section h1 {
+            font-size: 2rem;
+        }
+        
+        .contact-section::before,
+        .contact-section::after {
+            width: 50px;
+            height: 50px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="contact-section">
+    <h1>📞 Contact Us – Get in Touch with QuickBite! <span class="emoji-float">🍽️</span><span class="sparkle">✨</span></h1>
+    
+    <div class="contact-content">
+        <div class="contact-info">
+            <p>We'd love to hear from you! Whether you have a question, feedback, or just want to say hi, feel free to reach out.</p>
+            
+            <div class="contact-item">
+                <h3><span>📍</span>Address:</h3>
+                <p><strong>QuickBite HQ</strong><br>
+                KP-19, KIIT University, Bhubaneswar, 751024, India</p>
+            </div>
+            
+            <div class="contact-item">
+                <h3><span>📧</span>Email:</h3>
+                <p>📩 <a href="mailto:howladarkunal@gmail.com">howladarkunal@gmail.com</a></p>
+                <p>📩 <a href="mailto:jajatibarik81@gmail.com">jajatibarik81@gmail.com</a></p>
+            </div>
+            
+            <div class="contact-item">
+                <h3><span>🕐</span>Support Hours:</h3>
+                <p>Monday – Friday: <strong>9:00 AM – 6:00 PM (IST)</strong><br>
+                Saturday – Sunday: <strong>10:00 AM – 4:00 PM (IST)</strong></p>
+            </div>
+            
+            <p>Got a recipe idea? Need cooking advice? Just drop us a message—we're always happy to help! <span class="emoji-float" style="animation-delay: 0.5s;">🍳</span><span class="sparkle" style="animation-delay: 0.8s;">✨</span></p>
+        </div>
+    </div>
+</section>
+{% endblock %} 

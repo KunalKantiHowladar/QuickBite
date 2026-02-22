@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>QuickBite - Indian Recipe Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        /* Animation keyframes */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideInUp {
+            from { 
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideInDown {
+            from { 
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes scaleUp {
+            from { 
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to { 
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+        
+        @keyframes float {
+            0% {transform: translateY(0);}
+            50% {transform: translateY(-10px);}
+            100% {transform: translateY(0);}
+        }
+        
+        @keyframes rotate {
+            0% {transform: rotate(0deg);}
+            100% {transform: rotate(360deg);}
+        }
+        
+        /* Apply animations to elements */
+        .main-content {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .navbar {
+            animation: slideInDown 0.6s ease-out;
+        }
+        
+        .footer {
+            display: none;
+        }
+        
+        .footer::before, 
+        .footer::after,
+        .footer-content,
+        .footer-logo img,
+        .footer-logo p,
+        .footer-links,
+        .footer-links a,
+        .footer-links a::after {
+            display: none;
+        }
+        
+        /* Updated navbar styling */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            height: 80px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+        
+        .logo-container {
+            flex: 1;
+        }
+        
+        .logo {
+            height: 50px;
+            width: auto;
+            vertical-align: middle;
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        
+        .nav-links {
+            flex: 2;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            font-size: 1.35rem;
+            font-weight: 500;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            padding: 12px 8px;
+            position: relative;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: 0;
+            left: 0;
+            background-color: #FF6B35;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #FF6B35;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .auth-buttons {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+        
+        .auth-btn {
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .auth-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+        
+        .auth-btn:hover::before {
+            left: 0;
+        }
+        
+        .login-btn {
+            background-color: transparent;
+            color: #FF6B35;
+            border: 2px solid #FF6B35;
+            animation: scaleUp 0.7s ease-out;
+        }
+        
+        .login-btn:hover {
+            background-color: #FF6B35;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+        
+        .signup-btn {
+            background-color: #FF6B35;
+            color: white;
+            border: 2px solid #FF6B35;
+            animation: scaleUp 0.7s ease-out 0.1s;
+            animation-fill-mode: both;
+        }
+        
+        .signup-btn:hover {
+            background-color: #e55a2a;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+        
+        .logout-btn {
+            background-color: #FF6B35;
+            color: white;
+            border: 2px solid #FF6B35;
+            animation: scaleUp 0.7s ease-out;
+        }
+        
+        .logout-btn:hover {
+            background-color: #e55a2a;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+        
+        .mobile-auth-btn {
+            padding: 8px 0;
+            font-weight: 600;
+            color: #FF6B35;
+        }
+        
+        /* Media query for mobile responsiveness */
+        @media (max-width: 768px) {
+            .nav-links, .auth-buttons {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .navbar {
+                padding: 10px 20px;
+                height: 70px;
+            }
+        }
+        
+        /* Mobile styling with animations */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            font-size: 1.8rem;
+            color: #333;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-menu-btn:hover {
+            transform: rotate(90deg);
+            color: #FF6B35;
+        }
+        
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background-color: white;
+            z-index: 1000;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff6b35' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .mobile-nav.active {
+            right: 0;
+            animation: slideInRight 0.3s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            from { right: -100%; }
+            to { right: 0; }
+        }
+        
+        .mobile-nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            flex-grow: 1;
+        }
+        
+        .mobile-nav-links a {
+            padding: 15px 0;
+            font-size: 1.3rem;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+            transform: translateX(0);
+        }
+        
+        .mobile-nav-links a:hover {
+            color: #FF6B35;
+            transform: translateX(10px);
+            padding-left: 10px;
+        }
+        
+        .mobile-auth-btn {
+            padding: 15px 0 !important;
+            font-weight: 600;
+            color: #FF6B35;
+            font-size: 1.3rem !important;
+        }
+        
+        .close-mobile-nav {
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            color: #333;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .close-mobile-nav:hover {
+            transform: rotate(90deg);
+            color: #FF6B35;
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="app-container">
+        <header class="navbar">
+            <div class="logo-container">
+                <a href="{{ url_for('home') }}">
+                    <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="QuickBite Logo" class="logo">
+                    <span class="logo-text">QuickBite</span>
+                </a>
+            </div>
+            <nav class="nav-links">
+                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('about') }}">About</a>
+                <a href="{{ url_for('chat_page') }}">Chat</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+            </nav>
+            <div class="auth-buttons">
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('logout') }}" class="auth-btn logout-btn">Logout</a>
+                {% else %}
+                <a href="{{ url_for('login') }}" class="auth-btn login-btn">Login</a>
+                <a href="{{ url_for('signup') }}" class="auth-btn signup-btn">Sign Up</a>
+                {% endif %}
+            </div>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </header>
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                        <button class="close-btn">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <!-- Mobile Navigation Menu -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-header">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="QuickBite Logo" class="logo">
+                <span class="logo-text">QuickBite</span>
+            </div>
+            <button class="close-mobile-nav">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('about') }}">About</a>
+            <a href="{{ url_for('chat_page') }}">Chat</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('logout') }}" class="mobile-auth-btn">Logout</a>
+            {% else %}
+            <a href="{{ url_for('login') }}" class="mobile-auth-btn">Login</a>
+            <a href="{{ url_for('signup') }}" class="mobile-auth-btn">Sign Up</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            document.querySelector('.mobile-nav').classList.add('active');
+        });
+
+        document.querySelector('.close-mobile-nav').addEventListener('click', function() {
+            document.querySelector('.mobile-nav').classList.remove('active');
+        });
+
+        // Flash message close button
+        document.querySelectorAll('.close-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                this.parentElement.style.display = 'none';
+            });
+        });
+
+        // Auto-hide flash messages after 5 seconds
+        setTimeout(function() {
+            document.querySelectorAll('.flash-message').forEach(function(msg) {
+                msg.style.display = 'none';
+            });
+        }, 5000);
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html> 

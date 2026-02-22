@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+<meta name="user-id" content="{{ user.id }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="chat-page-container">
+    <div class="chat-main">
+        <div class="chat-header">
+            <div class="chat-header-icon">
+                <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="QuickBite Logo" style="height: 40px; width: 40px; border-radius: 50%; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.07);">
+            </div>
+            <div class="chat-header-info">
+                <h3>QuickBite AI</h3>
+                <p>Your Indian recipe assistant</p>
+            </div>
+        </div>
+        
+        <div class="chat-messages" id="chat-messages">
+            <div class="message bot single-line">Namaste! I'm QuickBite, your Indian cooking assistant. Please say 'hi' or 'hello' to start.</div>
+        </div>
+        
+        <div class="typing-indicator" id="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type your message here...">
+            <button class="send-btn" id="send-btn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Unique ID for this user session
+    const userId = "{{ user.id }}";
+    
+    // DOM elements
+    const chatMessages = document.getElementById('chat-messages');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    const typingIndicator = document.getElementById('typing-indicator');
+    
+    // Function to scroll to bottom of chat
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    // Show typing indicator
+    function showTypingIndicator() {
+        typingIndicator.style.display = 'flex';
+        scrollToBottom();
+    }
+    
+    // Hide typing indicator
+    function hideTypingIndicator() {
+        typingIndicator.style.display = 'none';
+    }
+    
+    // Add a message to the chat
+    function addMessage(message, sender, isSingleLine) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', sender);
+        
+        // Add single-line class if specified
+        if (isSingleLine) {
+            messageDiv.classList.add('single-line');
+        }
+        
+        // Check if this is an Indian recipe response
+        if (sender === 'bot' && message.includes('Indian Cuisine') || message.includes('curry') || 
+            message.includes('masala') || message.includes('tandoori')) {
+            messageDiv.classList.add('indian-recipe');
+        }
+        
+        // Check if the message indicates the chat has been stopped
+        if (sender === 'bot' && (message.includes('Conversation ended') || message.includes("I'm currently inactive"))) {
+            messageDiv.classList.add('inactive-message');
+            document.querySelector('.chat-main').classList.add('inactive-chat');
+        }
+        
+        // Check if the chat is being reactivated
+        if (sender === 'bot' && message === "Let's make a delicious dish together!") {
+            document.querySelector('.chat-main').classList.remove('inactive-chat');
+        }
+        
+        // Format message with proper HTML for recipes
+        if (sender === 'bot' && message.includes('\n')) {
+            message = message.replace(/\n/g, '<br>');
+            
+            // Highlight Indian terms
+            const indianTerms = ['curry', 'masala', 'tandoori', 'naan', 'biryani', 'paneer', 
+                                'samosa', 'chutney', 'indian', 'spicy', 'cumin', 'coriander',
+                                'turmeric', 'garam masala', 'cardamom', 'ginger', 'ghee'];
+            
+            indianTerms.forEach(term => {
+                const regex = new RegExp(`\\b${term}\\b`, 'gi');
+                message = message.replace(regex, `<span class="recipe-highlight">$&</span>`);
+            });
+        }
+        
+        messageDiv.innerHTML = message;
+        
+        // Add time
+        const timeSpan = document.createElement('span');
+        timeSpan.classList.add('message-time');
+        const now = new Date();
+        timeSpan.textContent = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+        messageDiv.appendChild(timeSpan);
+        
+        chatMessages.appendChild(messageDiv);
+        scrollToBottom();
+        
+        return messageDiv;
+    }
+    
+    // Send message to backend
+    async function sendMessage(message) {
+        // Add user message to chat
+        addMessage(message, 'user');
+        
+        // Clear input
+        userInput.value = '';
+        
+        // Show typing indicator
+        showTypingIndicator();
+        
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: message
+                })
+            });
+            
+            const data = await response.json();
+            console.log("Response data:", data); // Log response for debugging
+            
+            // Hide typing indicator
+            hideTypingIndicator();
+            
+            // Add bot message
+            if (data && data.response) {
+                const botMessage = addMessage(data.response, 'bot');
+                
+                // Check if there's a follow-up message
+                if (data.has_follow_up && data.follow_up) {
+                    // Add a small delay before showing follow-up
+                    setTimeout(() => {
+                        showTypingIndicator();
+                        
+                        setTimeout(() => {
+                            hideTypingIndicator();
+                            const followUpMessage = addMessage(data.follow_up, 'bot');
+                        }, 1000);
+                    }, 500);
+                }
+            } else {
+                addMessage("I received an empty response. Please try again.", 'bot');
+            }
+            
+        } catch (error) {
+            console.error("Chat error:", error); // Log error for debugging
+            hideTypingIndicator();
+            addMessage("Sorry, I'm having trouble connecting. Please try again.", 'bot');
+        }
+    }
+    
+    // Event listeners
+    sendBtn.addEventListener('click', function() {
+        const message = userInput.value.trim();
+        if (message === '') return;
+        sendMessage(message);
+    });
+    
+    userInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            const message = userInput.value.trim();
+            if (message === '') return;
+            sendMessage(message);
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+<style>
+    /* Home page specific styles */
+    .hero-section {
+        position: relative;
+        padding: 80px 20px;
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #fffdf9;
+        overflow: hidden;
+    }
+    
+    /* Food doodle decorations */
+    .hero-section::before {
+        content: "";
+        position: absolute;
+        top: 50px;
+        left: 50px;
+        width: 50px;
+        height: 50px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FF6B35' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 8h1a4 4 0 1 1 0 8h-1'/%3E%3Cpath d='M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z'/%3E%3Cline x1='6' y1='1' x2='6' y2='4'/%3E%3Cline x1='10' y1='1' x2='10' y2='4'/%3E%3Cline x1='14' y1='1' x2='14' y2='4'/%3E%3C/svg%3E");
+        opacity: 0.2;
+        z-index: 1;
+    }
+    
+    .hero-section::after {
+        content: "";
+        position: absolute;
+        bottom: 50px;
+        right: 50px;
+        width: 60px;
+        height: 60px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234A90E2' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3a4 4 0 0 0-4 4c0 1.473 2 3 2 3s2-1.527 2-3a4 4 0 0 0-4-4z'/%3E%3Cpath d='M2 9.5h20'/%3E%3Cpath d='M20 9.5a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2'/%3E%3Cpath d='M7 15.5v3'/%3E%3Cpath d='M17 15.5v3'/%3E%3Cpath d='M4 21.5h16'/%3E%3C/svg%3E");
+        opacity: 0.2;
+        z-index: 1;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        max-width: 800px;
+        animation: fadeIn 1s ease-out;
+    }
+    
+    .hero-title {
+        font-size: 3.5rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+        color: #2d2d2d;
+        animation: slideInDown 0.8s ease-out;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.8rem;
+        margin-bottom: 40px;
+        color: #555;
+        animation: slideInUp 0.8s ease-out;
+    }
+    
+    .hero-bg-pattern {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        opacity: 0.15;
+        background-image: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff6b35' fill-opacity='0.4'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    
+    .floating-animation {
+        animation: floating 6s ease-in-out infinite;
+    }
+    
+    @keyframes floating {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-15px); }
+        100% { transform: translateY(0px); }
+    }
+    
+    .cta-button {
+        display: inline-flex;
+        align-items: center;
+        background-color: #FF6B35;
+        color: white;
+        font-size: 1.2rem;
+        padding: 15px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        position: relative;
+        overflow: hidden;
+        animation: scaleUp 0.8s ease-out 0.4s;
+        animation-fill-mode: both;
+    }
+    
+    .cta-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: all 0.4s ease;
+        z-index: 1;
+    }
+    
+    .cta-button:hover::before {
+        left: 100%;
+    }
+    
+    .cta-button:hover {
+        background-color: #e55a2a;
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+    }
+    
+    .cta-button i {
+        margin-left: 10px;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .cta-buttons {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .feature-dots {
+        display: flex;
+        justify-content: center;
+        margin-top: 50px;
+        animation: fadeIn 1.2s ease-out;
+    }
+    
+    .dot {
+        width: 12px;
+        height: 12px;
+        background-color: #FF6B35;
+        border-radius: 50%;
+        margin: 0 8px;
+        animation: scaleUp 0.5s ease-out;
+    }
+    
+    .dot:nth-child(2) {
+        animation-delay: 0.1s;
+    }
+    
+    .dot:nth-child(3) {
+        animation-delay: 0.2s;
+    }
+    
+    .dot:nth-child(4) {
+        animation-delay: 0.3s;
+    }
+    
+    .dot:nth-child(5) {
+        animation-delay: 0.4s;
+    }
+    
+    .dot:nth-child(6) {
+        animation-delay: 0.5s;
+    }
+    
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.4rem;
+        }
+        
+        .cta-button {
+            font-size: 1rem;
+            padding: 12px 25px;
+        }
+        
+        .cta-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .hero-section::before,
+        .hero-section::after {
+            width: 30px;
+            height: 30px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-content">
+        <h1 class="hero-title">Hello! Welcome to QuickBite <span class="floating-animation" style="display: inline-block;">🍲</span></h1>
+        <h2 class="hero-subtitle">Let's find the perfect dish for you! <span class="floating-animation" style="display: inline-block; animation-delay: 1s;">✨</span></h2>
+        
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('chat_page') }}" class="cta-button">
+            Let's get started with your recipe search! <i class="fas fa-arrow-right"></i>
+        </a>
+        {% else %}
+        <div class="cta-buttons">
+            <a href="{{ url_for('login') }}" class="cta-button">
+                Log In <i class="fas fa-sign-in-alt"></i>
+            </a>
+            <a href="{{ url_for('signup') }}" class="cta-button" style="background-color: #4A90E2;">
+                Sign Up <i class="fas fa-user-plus"></i>
+            </a>
+        </div>
+        {% endif %}
+        
+        <div class="feature-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Hidden contact section to maintain navigation functionality -->
+<div id="contact" style="display:none;"></div>
+{% endblock %}
+
+{% block scripts %}
+<!-- No additional scripts needed on index page -->
+{% endblock %}
